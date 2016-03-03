@@ -314,7 +314,7 @@ operator << (log::logger&, ANSI_COLOR);
 	namespace { \
 		using namespace tip::log; \
 		const std::string c##_LOG_CATEGORY = #c;	\
-		logger::event_severity c##_DEFAULT_SEVERITY = logger::s; \
+		const logger::event_severity c##_DEFAULT_SEVERITY = logger::s; \
 		local \
 		local_log(logger::event_severity sv = c##_DEFAULT_SEVERITY) \
 		{ return local(c##_LOG_CATEGORY, sv); }\
@@ -325,7 +325,7 @@ operator << (log::logger&, ANSI_COLOR);
 	namespace { \
 		using namespace tip::log; \
 		const std::string c##_LOG_CATEGORY = #c;	\
-		logger::event_severity c##_DEFAULT_SEVERITY = s; \
+		const logger::event_severity c##_DEFAULT_SEVERITY = s; \
 		local \
 		local_log(logger::event_severity sv = c##_DEFAULT_SEVERITY) \
 		{ return local(c##_LOG_CATEGORY, sv); }\
@@ -336,7 +336,7 @@ operator << (log::logger&, ANSI_COLOR);
 	namespace { \
 		using namespace tip::log; \
 		const std::string c##_LOG_CATEGORY = #c;	\
-		logger::event_severity c##_DEFAULT_SEVERITY = logger::s; \
+		const logger::event_severity c##_DEFAULT_SEVERITY = logger::s; \
 		local \
 		f(logger::event_severity sv = c##_DEFAULT_SEVERITY) \
 		{ return local(c##_LOG_CATEGORY, sv); }\
@@ -347,7 +347,7 @@ operator << (log::logger&, ANSI_COLOR);
 	namespace { \
 		using namespace tip::log; \
 		const std::string c##_LOG_CATEGORY = #c;	\
-		logger::event_severity c##_DEFAULT_SEVERITY = s; \
+		const logger::event_severity c##_DEFAULT_SEVERITY = s; \
 		local \
 		f(logger::event_severity sv = c##_DEFAULT_SEVERITY) \
 		{ return local(c##_LOG_CATEGORY, sv); }\

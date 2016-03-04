@@ -239,8 +239,8 @@ operator << (logger& out, T const& v)
 {
 	logger::event_severity s = out.severity();
 	if (logger::min_severity() <= s && logger::OFF < s) {
-		std::ostream s(&out.buffer());
-		s << v;
+		std::ostream os(&out.buffer());
+		os << v;
 	}
 	return out;
 }

@@ -243,10 +243,10 @@ struct log_writer {
 				}
 			} catch (::std::exception const& e) {
 				auto time = boost::posix_time::microsec_clock::local_time();
-				out_ << time.time_of_day() << " Exception in logging thread: " << e.what() << ::std::cerr;
+				out_ << time.time_of_day() << " Exception in logging thread: " << e.what() << ::std::endl;
 			} catch (...) {
 				auto time = boost::posix_time::microsec_clock::local_time();
-				out_ << time.time_of_day() << " Unknown exception in logging thread"<< ::std::cerr;
+				out_ << time.time_of_day() << " Unknown exception in logging thread"<< ::std::endl;
 			}
 		}
 	}

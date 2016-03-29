@@ -206,8 +206,14 @@ struct log_writer {
 					empty_queue = events_.empty();
 				}
 				while (!empty_queue) {
-					event_ptr e = events_.front();
-					events_.pop();
+					event_ptr e;
+					{
+						std::unique_lock<std::mutex> lock(mtx_);
+						if (events_.empty()) break;
+						e = events_.front();
+						events_.pop();
+						if (!e) break;
+					}
 					event_data& evt = *e;
 					std::ostream::sentry s(out_);
 					if (s) {

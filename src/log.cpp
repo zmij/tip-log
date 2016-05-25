@@ -71,12 +71,14 @@ namespace {
 	{
 		proc_name(argv[0]);
 	}
+#ifdef GCC_5_3_1_FAIL
 #ifdef __linux__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
 	__attribute__((section(".init_array"))) void (* p_lib_main)(int,char*[],char*[]) = &lib_main;
 #pragma GCC diagnostic pop
 #endif /* __linux__ */
+#endif
 } // namespace
 
 namespace {

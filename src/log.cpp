@@ -488,8 +488,10 @@ namespace util {
 log::logger&
 operator << (log::logger& out, ANSI_COLOR col)
 {
-    std::ostream os(&out.buffer());
-    os << col;
+    if(log::logger::use_colors()) {
+        std::ostream os(&out.buffer());
+        os << col;
+    }
 	return out;
 }
 

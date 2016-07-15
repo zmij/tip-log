@@ -237,11 +237,8 @@ template < typename T >
 logger&
 operator << (logger& out, T const& v)
 {
-	logger::event_severity s = out.severity();
-	if (logger::min_severity() <= s && logger::OFF < s) {
-		std::ostream os(&out.buffer());
-		os << v;
-	}
+    std::ostream os(&out.buffer());
+    os << v;
 	return out;
 }
 

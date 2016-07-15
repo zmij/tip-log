@@ -352,16 +352,19 @@ struct logger::Impl {
 		} else {
 			evt.category_ = c;
 		}
-	}
+    }
 
-	void
-	flush()
-	{
-		if (!finished_ && event_.get() && size() > 0) {
-			event_data* e = event_.release();
-			writer_.push(event_ptr(e));
-		}
-	}
+    void
+    flush()
+    {
+        if (!finished_ && event_.get()) {
+            event_ptr e(event_.release());
+            if (logger::min_severity() <= e->severity_
+                && logger::OFF < e->severity_) {
+                writer_.push(e);
+            }
+        }
+    }
 
 	void
 	change_date_format()
@@ -485,13 +488,8 @@ namespace util {
 log::logger&
 operator << (log::logger& out, ANSI_COLOR col)
 {
-	using log::logger;
-	logger::event_severity s = out.severity();
-	if (logger::min_severity() <= s && logger::OFF < s
-			&& log::logger::use_colors()) {
-		std::ostream os(&out.buffer());
-		os << col;
-	}
+    std::ostream os(&out.buffer());
+    os << col;
 	return out;
 }
 

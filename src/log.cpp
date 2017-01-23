@@ -26,6 +26,10 @@
 #include <boost/date_time/posix_time/posix_time_io.hpp>
 #include <boost/date_time/date_facet.hpp>
 
+#ifdef __linux__
+#include <pthread.h>
+#endif
+
 namespace tip {
 namespace log {
 
@@ -219,6 +223,10 @@ struct log_writer {
     void
     run()
     {
+        // TODO Wrap in if have posix
+        #ifdef __linux__
+        pthread_setname_np(pthread_self(), "logger");
+        #endif
         while (!finished_) {
             try {
                 event_queue events;

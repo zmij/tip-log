@@ -26,7 +26,7 @@
 #include <boost/date_time/posix_time/posix_time_io.hpp>
 #include <boost/date_time/date_facet.hpp>
 
-#ifdef __linux__
+#if defined __linux__ or defined MACOSX
 #include <pthread.h>
 #endif
 
@@ -224,8 +224,10 @@ struct log_writer {
     run()
     {
         // TODO Wrap in if have posix
-        #ifdef __linux__
+        #if defined __linux__
         pthread_setname_np(pthread_self(), "logger");
+        #elif defined MACOSX
+        pthread_setname_np("logger");
         #endif
         while (!finished_) {
             try {

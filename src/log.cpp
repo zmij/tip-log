@@ -305,7 +305,7 @@ struct log_writer {
     }
 };
 
-struct logger::Impl {
+struct logger::impl {
     struct thread_number {
         size_t no;
     };
@@ -321,7 +321,7 @@ struct logger::Impl {
 
     bool finished_;
 
-    Impl(std::ostream& out)
+    impl(std::ostream& out)
             : writer_(out), writer_thread_(), finished_(false)
     {
         writer_thread_ = std::thread([&]{
@@ -329,7 +329,7 @@ struct logger::Impl {
         });
     }
 
-    Impl(::std::string const& file_name)
+    impl(::std::string const& file_name)
         : writer_(file_name), writer_thread_(), finished_(false)
     {
         writer_thread_ = std::thread([&]{
@@ -337,7 +337,7 @@ struct logger::Impl {
         });
     }
 
-    ~Impl()
+    ~impl()
     {
         try {
             flush();
@@ -427,14 +427,14 @@ void
 logger::set_stream(std::ostream& s)
 {
     logger& l = instance();
-    l.pimpl_.reset(new Impl(s));
+    l.pimpl_.reset(new impl(s));
 }
 
 void
 logger::set_target_file(::std::string const& file_name)
 {
     logger& l = instance();
-    l.pimpl_.reset(new Impl(file_name));
+    l.pimpl_.reset(new impl(file_name));
 }
 
 void
@@ -489,7 +489,7 @@ logger::severity_color(event_severity s)
 
 
 logger::logger(std::ostream& out)
-        : pimpl_(new Impl(out))
+        : pimpl_(new impl(out))
 {
 }
 

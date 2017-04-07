@@ -74,6 +74,12 @@ public:
     flush();
 
     /**
+     * Reopen log file
+     */
+    void
+    rotate();
+
+    /**
      * Singleton instance of the logger
      * @return
      */
@@ -147,9 +153,9 @@ public:
 private:
     logger(std::ostream&);
 
-    struct Impl;
-    typedef std::shared_ptr<Impl> PImpl;
-    PImpl pimpl_;
+    struct impl;
+    typedef std::shared_ptr<impl> pimpl;
+    pimpl pimpl_;
 };
 
 /**

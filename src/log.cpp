@@ -217,7 +217,12 @@ struct log_writer {
         if (redirect_)
             throw ::std::runtime_error{ "Log is already redirected" };
         unique_lock lock{mtx_};
-        redirect_ = ::std::make_shared< stream_redirect >( out_, file );
+        try {
+            redirect_ = ::std::make_shared< stream_redirect >( out_, file );
+        } catch (...) {
+            redirect_.reset();
+            throw;
+        }
     }
 
     void

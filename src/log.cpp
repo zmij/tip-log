@@ -203,15 +203,15 @@ struct log_writer {
         out_.flush();
     }
 
-	void
-	change_date_format()
-	{
+    void
+    change_date_format()
+    {
         using boost::gregorian::date_facet;
         date_facet* f = new date_facet(date_format.c_str());
         out_.imbue(std::locale(std::locale::classic(), f));
     }
 
-	void
+    void
     redirect(::std::string const& file)
     {
         if (redirect_)
@@ -261,7 +261,7 @@ struct log_writer {
 
                         event_data& evt = *e;
                         std::ostream::sentry s(out_);
-                        if (s) {
+                        if (out_.good() && s) {
                             bool use_colors = logger_use_colors;
                             if (use_colors)
                                 out_ << severity_colors[ evt.severity_ ];

@@ -186,6 +186,7 @@ struct log_writer {
     event_queue                         events_;
     std::condition_variable             cond_;
     mutex_type                          mtx_;
+    mutex_type                          stream_mtx_;
 
     bool                                finished_;
 
@@ -216,7 +217,7 @@ struct log_writer {
     {
         if (redirect_)
             throw ::std::runtime_error{ "Log is already redirected" };
-        unique_lock lock{mtx_};
+        unique_lock lock{stream_mtx_};
         try {
             redirect_ = ::std::make_shared< stream_redirect >( out_, file );
         } catch (...) {
@@ -229,7 +230,7 @@ struct log_writer {
     reopen()
     {
         if (redirect_) {
-            unique_lock lock{mtx_};
+            unique_lock lock{stream_mtx_};
             redirect_->reopen();
         }
     }
@@ -260,6 +261,7 @@ struct log_writer {
                         if (!e) break;
 
                         event_data& evt = *e;
+                        unique_lock lock{stream_mtx_};
                         std::ostream::sentry s(out_);
                         if (out_.good() && s) {
                             bool use_colors = logger_use_colors;
@@ -291,12 +293,15 @@ struct log_writer {
                     unique_lock lock{mtx_};
                     events.swap(events_);
                 }
+                unique_lock lock{stream_mtx_};
                 out_.flush();
             } catch (::std::exception const& e) {
                 auto time = boost::posix_time::microsec_clock::universal_time();
+                unique_lock lock{stream_mtx_};
                 out_ << time.time_of_day() << " Exception in logging thread: " << e.what() << ::std::endl;
             } catch (...) {
                 auto time = boost::posix_time::microsec_clock::universal_time();
+                unique_lock lock{stream_mtx_};
                 out_ << time.time_of_day() << " Unknown exception in logging thread"<< ::std::endl;
             }
         }

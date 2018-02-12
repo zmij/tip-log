@@ -251,6 +251,28 @@ operator << (logger& out, T const& v)
     return out;
 }
 
+struct istream {
+    ::std::istream& is;
+};
+
+inline ::std::ostream&
+operator <<(::std::ostream& os, istream const& val)
+{
+    ::std::ostream::sentry s(os);
+    if (s) {
+        auto pos = val.is.tellg();
+
+        char c{0};
+        while (val.is.get(c)) {
+            os.put(c);
+        }
+
+        val.is.seekg(pos, val.is.beg);
+    }
+    return os;
+}
+
+
 template < typename T >
 local
 operator << (local out, T const& v)
